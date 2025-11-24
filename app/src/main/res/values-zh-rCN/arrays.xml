@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme（真正显示给用户看的） -->
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="theme_default">跟随系统</string>
+
+    <!-- Message Layout：条目显示给用户看 -->
+    <string name="message_layout_entry_normal">标准</string>
+    <string name="message_layout_entry_compact">紧凑</string>
+
+    <!-- Message Layout：这些是内部值，不想翻也没关系，照抄一份就行 -->
+    <string name="message_layout_value_normal">message_layout_normal</string>
+    <string name="message_layout_value_compact">message_layout_compact</string>
+
+    <!-- Time Format：条目显示给用户看 -->
+    <string name="time_format_entry_absolute">绝对时间</string>
+    <string name="time_format_entry_relative">相对时间</string>
+
+    <!-- Time Format：内部值，同样照抄 -->
+    <string name="time_format_value_absolute">time_format_absolute</string>
+    <string name="time_format_value_relative">time_format_relative</string>
+</resources>
