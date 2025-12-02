@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.format.DateUtils
+import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import androidx.core.text.HtmlCompat
 import coil.ImageLoader
 import coil.load
 import com.github.gotify.MarkwonFactory
@@ -76,9 +78,16 @@ internal class ListMessageAdapter(
         if (Extras.useMarkdown(message.message)) {
             holder.message.autoLinkMask = 0
             markwon.setMarkdown(holder.message, message.message.message)
+            holder.message.movementMethod = null
+        } else if (Extras.useHtml(message.message)) {
+            holder.message.autoLinkMask = 0
+            holder.message.text =
+                HtmlCompat.fromHtml(message.message.message, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            holder.message.movementMethod = LinkMovementMethod.getInstance()
         } else {
             holder.message.autoLinkMask = Linkify.WEB_URLS
             holder.message.text = message.message.message
+            holder.message.movementMethod = null
         }
         holder.title.text = message.message.title
         if (message.image != null) {
