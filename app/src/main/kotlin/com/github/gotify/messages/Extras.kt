@@ -5,17 +5,34 @@ import com.github.gotify.client.model.Message
 internal object Extras {
     fun useMarkdown(message: Message): Boolean = useMarkdown(message.extras)
 
-    fun useMarkdown(extras: Map<String, Any>?): Boolean {
+    fun useHtml(message: Message): Boolean = useHtml(message.extras)
+
+    fun useMarkdown(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/markdown")
+
+    fun useHtml(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/html")
+
+    private fun hasContentType(extras: Map<String, Any>?, expectedContentType: String): Boolean {
+        val actualContentType = contentType(extras) ?: return false
+
+        return actualContentType.substringBefore(';').trim().equals(expectedContentType, true)
+    }
+
+    private fun contentType(extras: Map<String, Any>?): String? {
         if (extras == null) {
-            return false
+            return null
         }
 
         val display: Any? = extras["client::display"]
         if (display !is Map<*, *>) {
-            return false
+            return null
         }
 
-        return "text/markdown" == display["contentType"]
+        val contentType = display["contentType"]
+        if (contentType !is String) {
+            return null
+        }
+
+        return contentType
     }
 
     fun <T> getNestedValue(clazz: Class<T>, extras: Map<String, Any>?, vararg keys: String): T? {

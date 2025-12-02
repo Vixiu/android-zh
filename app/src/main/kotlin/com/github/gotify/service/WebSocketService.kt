@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.text.HtmlCompat
 import androidx.preference.PreferenceManager
 import com.github.gotify.BuildConfig
 import com.github.gotify.CoilInstance
@@ -399,6 +400,9 @@ internal class WebSocketService : Service() {
         var newMessage: String? = null
         if (Extras.useMarkdown(extras)) {
             formattedMessage = markwon.toMarkdown(message)
+            newMessage = formattedMessage.toString()
+        } else if (Extras.useHtml(extras)) {
+            formattedMessage = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
             newMessage = formattedMessage.toString()
         }
         b.setContentText(newMessage ?: message)
