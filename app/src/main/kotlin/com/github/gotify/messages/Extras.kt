@@ -3,53 +3,45 @@ package com.github.gotify.messages
 import com.github.gotify.client.model.Message
 
 internal object Extras {
-    fun useMarkdown(message: Message): Boolean = useMarkdown(message.extras)
 
-    fun useHtml(message: Message): Boolean = useHtml(message.extras)
+    fun useHtml(message: Message): Boolean =
+        useHtml(message.extras)
 
-    fun useMarkdown(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/markdown")
+    fun useHtml(extras: Map<String, Any>?): Boolean =
+        hasContentType(extras, "text/html")
 
-    fun useHtml(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/html")
+    fun useMarkdown(message: Message): Boolean =
+        useMarkdown(message.extras)
 
-    private fun hasContentType(extras: Map<String, Any>?, expectedContentType: String): Boolean {
-        val actualContentType = contentType(extras) ?: return false
+    fun useMarkdown(extras: Map<String, Any>?): Boolean =
+        hasContentType(extras, "text/markdown")
 
-        return actualContentType.substringBefore(';').trim().equals(expectedContentType, true)
+    private fun hasContentType(
+        extras: Map<String, Any>?,
+        expectedContentType: String
+    ): Boolean {
+        val actual = contentType(extras) ?: return false
+        return actual.substringBefore(';')
+            .trim()
+            .equals(expectedContentType, ignoreCase = true)
     }
 
     private fun contentType(extras: Map<String, Any>?): String? {
-        if (extras == null) {
-            return null
-        }
-
-        val display: Any? = extras["client::display"]
-        if (display !is Map<*, *>) {
-            return null
-        }
-
-        val contentType = display["contentType"]
-        if (contentType !is String) {
-            return null
-        }
-
-        return contentType
+        val display = extras?.get("client::display") as? Map<*, *> ?: return null
+        return display["contentType"] as? String
     }
 
-    fun <T> getNestedValue(clazz: Class<T>, extras: Map<String, Any>?, vararg keys: String): T? {
+    fun <T> getNestedValue(
+        clazz: Class<T>,
+        extras: Map<String, Any>?,
+        vararg keys: String
+    ): T? {
         var value: Any? = extras
 
-        keys.forEach { key ->
-            if (value == null) {
-                return null
-            }
-
-            value = (value as Map<*, *>)[key]
+        for (key in keys) {
+            value = (value as? Map<*, *>)?.get(key) ?: return null
         }
 
-        if (!clazz.isInstance(value)) {
-            return null
-        }
-
-        return clazz.cast(value)
+        return if (clazz.isInstance(value)) clazz.cast(value) else null
     }
 }
