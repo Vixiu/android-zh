@@ -12,8 +12,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+
+      # 💖 方案 A：自动修复 Kotlin 格式（最重要）
+      - name: Format Kotlin
+        run: ./gradlew formatKotlin
+
       - if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: ./gradlew build --stacktrace
+
       - if: ${{ startsWith(github.ref, 'refs/tags/v') }}
         run: |
           export RELEASE_STORE_FILE=$(pwd)/gotfy-release-key.jks
@@ -25,6 +31,7 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.STOREPASS }}
           RELEASE_KEY_ALIAS: gotify-release-key
           RELEASE_KEY_PASSWORD: ${{ secrets.KEYPASS }}
+
       - if: ${{ startsWith(github.ref, 'refs/tags/v') }}
         uses: svenstaro/upload-release-action@v2
         with:
