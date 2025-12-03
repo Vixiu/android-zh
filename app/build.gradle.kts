@@ -77,6 +77,7 @@ if (project.hasProperty("sign")) {
 dependencies {
     val coilVersion = "2.7.0"
     val markwonVersion = "4.6.2"
+    val flexmarkVersion = "0.64.8"
     val tinylogVersion = "2.7.0"
     implementation(project(":client"))
     implementation("androidx.appcompat:appcompat:1.7.1")
@@ -95,6 +96,8 @@ dependencies {
     implementation("io.noties.markwon:image:$markwonVersion")
     implementation("io.noties.markwon:ext-tables:$markwonVersion")
     implementation("io.noties.markwon:ext-strikethrough:$markwonVersion")
+
+    implementation("com.vladsch.flexmark:flexmark-all:$flexmarkVersion")
 
     implementation("org.tinylog:tinylog-api-kotlin:$tinylogVersion")
     implementation("org.tinylog:tinylog-impl:$tinylogVersion")

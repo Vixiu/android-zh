@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import androidx.core.text.HtmlCompat
 import coil.ImageLoader
 import coil.load
 import com.github.gotify.MarkwonFactory
@@ -79,10 +78,9 @@ internal class ListMessageAdapter(
             holder.message.autoLinkMask = 0
             markwon.setMarkdown(holder.message, message.message.message)
             holder.message.movementMethod = null
-        } else if (Extras.useHtml(message.message)) {
+        } else if (Extras.useFlexmark(message.message)) {
             holder.message.autoLinkMask = 0
-            holder.message.text =
-                HtmlCompat.fromHtml(message.message.message, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            holder.message.text = FlexmarkRenderer.render(message.message.message)
             holder.message.movementMethod = LinkMovementMethod.getInstance()
         } else {
             holder.message.autoLinkMask = Linkify.WEB_URLS
