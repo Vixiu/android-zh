@@ -5,11 +5,12 @@ import com.github.gotify.client.model.Message
 internal object Extras {
     fun useMarkdown(message: Message): Boolean = useMarkdown(message.extras)
 
-    fun useHtml(message: Message): Boolean = useHtml(message.extras)
+    fun useFlexmark(message: Message): Boolean = useFlexmark(message.extras)
 
     fun useMarkdown(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/markdown")
 
-    fun useHtml(extras: Map<String, Any>?): Boolean = hasContentType(extras, "text/html")
+    fun useFlexmark(extras: Map<String, Any>?): Boolean =
+        hasContentType(extras, "text/flexmark")
 
     private fun hasContentType(extras: Map<String, Any>?, expectedContentType: String): Boolean {
         val actualContentType = contentType(extras) ?: return false

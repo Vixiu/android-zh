@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.text.HtmlCompat
 import androidx.preference.PreferenceManager
 import com.github.gotify.BuildConfig
 import com.github.gotify.CoilInstance
@@ -36,6 +35,7 @@ import com.github.gotify.client.model.Message
 import com.github.gotify.log.LoggerHelper
 import com.github.gotify.log.UncaughtExceptionHandler
 import com.github.gotify.messages.Extras
+import com.github.gotify.messages.FlexmarkRenderer
 import com.github.gotify.messages.IntentUrlDialogActivity
 import com.github.gotify.messages.MessagesActivity
 import io.noties.markwon.Markwon
@@ -401,8 +401,8 @@ internal class WebSocketService : Service() {
         if (Extras.useMarkdown(extras)) {
             formattedMessage = markwon.toMarkdown(message)
             newMessage = formattedMessage.toString()
-        } else if (Extras.useHtml(extras)) {
-            formattedMessage = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        } else if (Extras.useFlexmark(extras)) {
+            formattedMessage = FlexmarkRenderer.render(message)
             newMessage = formattedMessage.toString()
         }
         b.setContentText(newMessage ?: message)
